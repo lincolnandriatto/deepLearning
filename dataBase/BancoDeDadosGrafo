@@ -1,0 +1,112 @@
+
+Banco de dados baseado em Grafo
+
+Por que Grafos?
+
+Inicialmente feito nos anos 60 naquela época não havia muitos motivos para uso
+
+Hoje as coisas mudaram
+
+Banco de dados baseado em grafo, tem por objetivo ser menos genérico
+
+Modelagem mais simples
+
+Maior performance, se livrando de operações custosas como JOINs
+
+Não precisa de um designer complexo para incluir tabelas
+
+Dentro do banco de dados baseado em grafos é criado um "NÓ" é representado no banco de dados por um círculo
+
+O nó possui conjunto de propriedades de chave e valor.
+
+O relacionamento dos nós é através de arestas, que possui um direcionamento, sinalizado por uma seta
+
+Hoje existem alguns banco de dados:
+
+	AllegroGraph
+
+	ArangoDb
+
+	Bitsy (java)
+
+	BrightstarDB (feito para .Net)
+
+	DEX (possui api .Net e roda em windows)
+
+	Filament
+
+	InfiniteGraph
+
+	InfoGrid
+
+	HyperGraphDb
+
+	Oracle Spatial
+
+	Titan
+
+	Neo4J 
+
+
+
+
+Banco de dados como o neo4j provem caracteristicas como ACID e cluster,
+
+Atomicity
+Consistency
+Isolation
+Durability
+
+Banco de dados operam para diversos usuários e precisa garantir as transações ocorram com segurança
+Transação é um conjunto de operações executada como uma unidade logica de de trabalho
+
+Atomicity: É a capacidade de executar uma transação que envolve duas ou mais partes, e ela tem que acontecer totalmente ou não acontece.
+
+Consistencia: Cria um novo estado dos dados, caso de falha os dados são retornados como era antes
+
+Isolation: a transação é isolada de outras transações
+
+Durabilidade: Em caso de falha ou reinicio e sistema, os dados estão disponiveis no estado correto
+
+O neo4j usa linguagem de consulta chamada cypher em vez de SQL
+
+*Por meio do banco de dados baseado em grafos é possível guardar informação de forma aberta e interligada
+*Com isso consigo interligar dado, eu consigo descobrir conhecimento, consigo fazer associações, consigo fazer coisas
+
+Não vou usar isso, para fazer controle de estoque, folha de pagamento
+O objetivo do banco de dados baseado em grafos não é competir com banco de dados relacional
+
+Existem cenários onde é apropriado usar banco de dados baseado em grafos, por exemplo o face book usa banco de dados de grafo
+
+A rede social é um grafo, guardando as informações em grafos me permite um pesquisa diferenciada
+
+por exemplo se eu falar aqui a palavra PET, o que voces vão lembrar?
+
+Pet Show Boys?
+
+Uma dupla britanica que fez bastante sucesso nos anos 80
+
+Talvez voce vai lembrar da garrafa pet
+
+ou de de animais de estimação
+
+A ocorrência da palavra "PET" pode ficar em grupos diferentes
+
+Animais de estimação
+
+Refigerantes
+
+Musica
+
+Como eu faço o computador associar as informações como a mente humana?
+
+Eu consigo construir grafos o significado de palavras, baseado na mera associação da outra palavra
+
+
+
+
+
+
+
+
+
