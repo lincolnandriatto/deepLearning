@@ -5,7 +5,9 @@ Por que Grafos?
 
 Inicialmente feito nos anos 60 naquela época não havia muitos motivos para uso
 
-Hoje as coisas mudaram
+Hoje as coisas mudaram, o volume de informação é muito maior
+
+Temos rede sociais, algoritimos de busca, armazenamento na nuvem
 
 Banco de dados baseado em grafo, tem por objetivo ser menos genérico
 
@@ -101,12 +103,4 @@ Musica
 Como eu faço o computador associar as informações como a mente humana?
 
 Eu consigo construir grafos o significado de palavras, baseado na mera associação da outra palavra
-
-
-
-
-
-
-
-
 
