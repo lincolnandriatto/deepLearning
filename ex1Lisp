@@ -1,0 +1,31 @@
+;gnu clisp 2.49
+
+(setq produtosLista '((agua 2.00) (sabao 1.00) (arroz 3.00)))
+
+(defun buscaItemProdutos(item)
+    (setq result (find item produtosLista :test #'subsetp))
+    (if result result "Produto não encontrado")
+    )
+
+;(print (buscaItemProdutos '(sabao)))
+
+(defun listarProdutos()
+	(sort produtosLista #'string-lessp :key #'car)
+)
+
+(defun solicitaProduto() 
+	(terpri) 
+	(princ "Nome do produto : ") 
+	(setq nomeProduto (read))
+	(princ "Quantidade do produto: ") 
+	(setq quantidadeProduto (read)) 
+	(print quantidadeProduto)
+	(setq list '())
+	(push nomeProduto list)
+	(setq produto (buscaItemProdutos list))
+	(print "#########")
+	(print produto)
+	(print "#########")
+	(print (cdr produto))
+	;(print (concatenate 'string produto (write-to-string (cdr produto)) ))
+)
