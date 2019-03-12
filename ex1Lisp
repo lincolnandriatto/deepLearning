@@ -1,6 +1,6 @@
-;gnu clisp 2.49
 
 (setq produtosLista '((agua 2.00) (sabao 1.00) (arroz 3.00)))
+(setq valorTotal 0)
 
 (defun buscaItemProdutos(item)
     (setq result (find item produtosLista :test #'subsetp))
@@ -10,7 +10,19 @@
 ;(print (buscaItemProdutos '(sabao)))
 
 (defun listarProdutos()
-	(sort produtosLista #'string-lessp :key #'car)
+	(setq listaOrdenada (sort produtosLista #'string-lessp :key #'car))
+	(setq i 0)
+	(loop for (a b) in listaOrdenada
+            do (format t "Nome do produto: ~a; Preço: ~a~%" a b)
+			(if (= i 2) (paginacao) )
+			)
+)
+
+(defun paginacao()
+	(terpri) 
+	(print "selecione opção desejada")
+	(setq optP (read))
+	;(if (= optP 1) )
 )
 
 (defun solicitaProduto() 
@@ -26,6 +38,37 @@
 	(print "#########")
 	(print produto)
 	(print "#########")
-	(print (cdr produto))
+	(setq vlP (cdr produto))
+	(print "@@@@@@@@@")
+	(setq valorParcial (* (pop vlP) quantidadeProduto))
+	(setq valorTotal (+ valorTotal valorParcial))
+	(print "valor parcial")
+	(print valorParcial)
+	(print "valor total")
+	(print valorTotal)
+	(print "@@@@@@@@@")
 	;(print (concatenate 'string produto (write-to-string (cdr produto)) ))
+)
+
+
+(defun menuCompras()
+	(terpri)
+	(print "Tecle 1 para compras")
+	(print "Tecle 2 para sair")
+	(print "Digite opção desejada: ")
+	(setq opcao (read))
+	(compras opcao)
+)
+
+
+(defun compras(opcao)
+	(print (if (= opcao 1) (efetuarCompras) "operação finalizada" ))
+)
+
+(defun efetuarCompras()
+	(print "efetuando compras")
+	(solicitaProduto)
+	(print "tecle 1 para continuar ou tecle 2 para sair")
+	(setq op (read))
+	(compras op)
 )
