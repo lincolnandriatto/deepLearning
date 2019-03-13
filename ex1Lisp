@@ -1,28 +1,43 @@
 
-(setq produtosLista '((agua 2.00) (sabao 1.00) (arroz 3.00)))
+(setq produtosLista '((agua 2.00) (sabao 1.00) (arroz 3.00) (feijao 2.00) (azeite 2.00) (aveia 5.00) (banana 3.00) (granola 2.00) (bolacha 4.00) (melancia 5.00) (ameixa 5.00) (queijo 2.00) (presunto 3.00) (mortadela 2.00) (candida 3.00) (detergente 1.00) (desinfetante 2.00) (cafe 10.00) (chocolate 2.00) (manteiga 2.00) (vinagre 5.00) (maionese 5.00) (molho 5.00) (abobora 5.00) (sabonete 1.00) (peixe 5.00) (picanha 5.00) (provolone 5.00) (gorgonzola 5.00) (chedar 5.00) (ovo 9.00) (amaciante 7.00) (guardanapo 5.00) (nectarina 10.00) (graviola 10.00) (manga 5.00) (goiaba 5.00) (bacon 5.00) (desodorante 5.00) (uva 8.00)))
+	
 (setq valorTotal 0)
 
+;;(print (buscaItemProdutos '(sabao)))
 (defun buscaItemProdutos(item)
-    (setq result (find item produtosLista :test #'subsetp))
-    (if result result "Produto não encontrado")
-    )
-
-;(print (buscaItemProdutos '(sabao)))
-
-(defun listarProdutos()
-	(setq listaOrdenada (sort produtosLista #'string-lessp :key #'car))
-	(setq i 0)
-	(loop for (a b) in listaOrdenada
-            do (format t "Nome do produto: ~a; Preço: ~a~%" a b)
-			(if (= i 2) (paginacao) )
-			)
+	(setq result (find item produtosLista :test #'subsetp))
+	(if result result "Produto não encontrado")
 )
 
-(defun paginacao()
-	(terpri) 
-	(print "selecione opção desejada")
-	(setq optP (read))
-	;(if (= optP 1) )
+(setq incrementoPaginacao 20)
+(defun listarProdutos(posicaoInicial itemsPaginacao)
+	
+	(setq listaOrdenada (sort produtosLista #'string-lessp :key #'car))
+	(setq posicaoFinal (list-length listaOrdenada))
+	
+	(princ "posicaoInicial")
+	(print posicaoInicial)
+	
+	(princ "posicaoFinal")
+	(print posicaoFinal)
+	
+	(if (< posicaoInicial posicaoFinal)
+		(loop for i from posicaoInicial to itemsPaginacao
+			do (if (= i itemsPaginacao) (paginacao i itemsPaginacao) (format t "Produto: ~a; Preço: ~a~%" (nth 0(nth i listaOrdenada)) (nth 1(nth i listaOrdenada))))
+		)
+		(print "Fim da lista")
+	)
+
+	(if (= posicaoInicial 0) (print "Operação finalizada"))
+	
+)
+
+(defun paginacao(index itemsPaginacao)
+	(terpri)
+	(print "Tecle 1 para proxima lista ou qualquer tecla para sair")
+	(print "Digite opção desejada: ")
+	(setq opcao (read))
+	(if (= opcao 1) (listarProdutos index (+ itemsPaginacao incrementoPaginacao)))
 )
 
 (defun solicitaProduto() 
@@ -35,26 +50,30 @@
 	(setq list '())
 	(push nomeProduto list)
 	(setq produto (buscaItemProdutos list))
-	(print "#########")
-	(print produto)
-	(print "#########")
 	(setq vlP (cdr produto))
-	(print "@@@@@@@@@")
 	(setq valorParcial (* (pop vlP) quantidadeProduto))
 	(setq valorTotal (+ valorTotal valorParcial))
-	(print "valor parcial")
-	(print valorParcial)
-	(print "valor total")
-	(print valorTotal)
-	(print "@@@@@@@@@")
+	
+	(print "------------------")
+	(print "Nome do produto: ")
+	(princ (nth 0 produto))
+	
+	(print "Valor parcial: ")
+	(princ valorParcial)
+	(print "Valor total: ")
+	(princ valorTotal)
+	(print "------------------")
 	;(print (concatenate 'string produto (write-to-string (cdr produto)) ))
 )
 
 
 (defun menuCompras()
 	(terpri)
-	(print "Tecle 1 para compras")
-	(print "Tecle 2 para sair")
+	(print "Selecione opção desejada")
+	(print "(1) para pesquisar produto")
+	(print "(2) listar todos os produtos")
+	(print "(3) comprar")
+	(print "(4) sair")
 	(print "Digite opção desejada: ")
 	(setq opcao (read))
 	(compras opcao)
@@ -62,13 +81,12 @@
 
 
 (defun compras(opcao)
-	(print (if (= opcao 1) (efetuarCompras) "operação finalizada" ))
+	(print (if (= opcao 1) (efetuarCompras) "Operação finalizada" ))
 )
 
 (defun efetuarCompras()
-	(print "efetuando compras")
 	(solicitaProduto)
-	(print "tecle 1 para continuar ou tecle 2 para sair")
+	(print "Tecle 1 para continuar ou tecle 2 para sair")
 	(setq op (read))
 	(compras op)
 )
