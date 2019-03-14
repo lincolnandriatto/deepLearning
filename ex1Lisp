@@ -53,7 +53,7 @@
 		(loop for i from posicaoInicial to itemsPaginacao
 			do (if (= i itemsPaginacao) (paginacao i itemsPaginacao) (format t "Produto: ~a; Preço: ~a~%" (nth 0(nth i listaOrdenada)) (nth 1(nth i listaOrdenada))))
 		)
-		(print "Fim da lista")
+		(print "Final da lista")
 	)
 
 	(if (= posicaoInicial 0) (print "Operação finalizada"))
@@ -90,7 +90,35 @@
 	(print "Valor total: ")
 	(princ valorTotal)
 	(print "------------------")
-	;(print (concatenate 'string produto (write-to-string (cdr produto)) ))
+	
+	(terpri)
+	(print "Selecione opção desejada")
+	(print "(1) Selecionar outro produto")
+	(print "(2) Finalizar compra")
+	(print "(3) Voltar menu anterior")
+	(print "(4) sair")
+	(print "Digite opção desejada: ")
+	(setq opcaoCompras (read))	
+	(if (= opcaoCompras 1)
+		(solicitaProduto)
+		(if (= opcaoCompras 2)
+			(finalizarCompra)
+			(if (= opcaoCompras 3)
+				(menuCompras)
+				(if (= opcaoCompras 4)
+					"Serviço finalizado"
+				)
+			)
+		)
+	)
+)
+
+(defun finalizarCompra()
+	(print "Compra finalizada")
+	(print "Valor total: ")
+	(princ valorTotal)
+	(setq valorTotal 0)
+	(menuCompras)
 )
 
 
@@ -138,4 +166,4 @@
 ;################Chamada da Função principal#################
 ;############################################################
 (main)
-
+;############################################################
