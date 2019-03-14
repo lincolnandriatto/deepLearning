@@ -9,6 +9,17 @@
 	(if result result "Produto não encontrado")
 )
 
+(defun pesquisaProduto() 
+	(terpri) 
+	(princ "Nome do produto : ") 
+	(setq nomeProduto (read))
+	(setq list '())
+	(push nomeProduto list)
+	(setq produto (buscaItemProdutos list))
+	(princ "Nome do produto: ")
+	(print (nth 0 (produto)))
+)
+
 (setq incrementoPaginacao 20)
 (defun listarProdutos(posicaoInicial itemsPaginacao)
 	
@@ -29,7 +40,6 @@
 	)
 
 	(if (= posicaoInicial 0) (print "Operação finalizada"))
-	
 )
 
 (defun paginacao(index itemsPaginacao)
@@ -76,7 +86,19 @@
 	(print "(4) sair")
 	(print "Digite opção desejada: ")
 	(setq opcao (read))
-	(compras opcao)
+	;(compras opcao)
+	(if (= opcao 1) 
+		(pesquisaProduto) 
+		(if (= opcao 2) 
+			(listarProdutos 0 20)
+			(if (= opcao 3) 
+				(efetuarCompras) 
+				(if (= opcao 4) 
+					"Operaçao finalizada"
+				)
+			)
+		)
+	)
 )
 
 
@@ -90,3 +112,13 @@
 	(setq op (read))
 	(compras op)
 )
+
+(defun main()
+	(menuCompras)
+)
+
+;############################################################
+;################Chamada da Função principal#################
+;############################################################
+(main)
+
