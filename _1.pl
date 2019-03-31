@@ -66,9 +66,48 @@ primo(X, Y):-
     homem(X),gerou(Z, X),irmaos(Z, W),gerou(W, Y).
 
 
-
-
-
-
-
-
+%Questões:
+%(1) - Noé é primo de Clô?
+%sim
+%primo(noé, clô).
+%
+%(2) - Clô é prima de Lia?
+%sim
+%prima(clô, lia).
+%
+%(3) - Eva é tia de Noé?
+%sim
+%tia(eva, noé).
+%
+%(4) - Ary é tipo de Clô?
+%sim
+%tio(ary, clô).
+%
+%(5) - Ana é avó de Clô?
+%sim
+%avó(ana, clô).
+%
+%(6) - Ivo é avô de Noé?
+%sim
+%avô(ivo, noé).
+%
+%(7) - Rui é pai de Clô?
+%sim
+%pai(rui, clô).
+%
+%(8) - Gal é mãe de Lia?
+%sim
+%mae(gal, lia).
+%
+%(9) - Paty e Ary são casados?
+%sim
+%casal(paty, ary).
+%
+%(10) Noé é filho de Pat?
+%sim
+%filho(noé, pat).
+%
+%(11) - Clô é filha de Eva?
+%sim
+%filha(clô, eva).
+%
