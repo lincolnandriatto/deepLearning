@@ -2,9 +2,9 @@ from random import random
 from math import tan
 import numpy as np
 
-X = [[0, 0], [0, 1], [1, 0], [1, 1]]
+X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]);
 d = [ -1, -1, -1, 1]
-W = percptrom(X, d)
+#W = percptrom(X, d)
 
 def perceptron(X, d):
     N=len(X);
@@ -36,20 +36,21 @@ def perceptron(X, d):
     #title('Evolucao do EQM')
 
 def calc_grad(X, d, W, N):
-    Z=X*W.T();
+
+    Z=np.dot(X, W.T);
     Y= tan(Z);
     erro = Y -d;
-    dJdW = 1/N*((erro.*(1-Y.*Y)).transpose()*X);
-    return djdW;
+    dJdW = np.dot((1/N), np.dot(((np.dot(erro, (np.dot((1-Y),Y)))).T, X)));
+    return dJdW;
 
 def calc_saida(X, W):
-    Z= X * W.T();
+    Z= np.dot(X * W.T);
     Y= tan(Z);
     return Y;
 
 def calc_alfa(X, d, W, dir, N):
     alfa_l= 0;
-    alfa_u= rand;
+    alfa_u= random();
     Wnew = W + alfa_u*dir;
     #%*******************************************************
     # calcula o alfa_u positivo
@@ -70,15 +71,13 @@ def calc_alfa(X, d, W, dir, N):
     while nit<k & abs(h)>1.0e-5:
         Wnew = W + alfa_m*dir;
         g=calc_grad(X,d,Wnew,N);
-        h=g(:)'*dir(:);
-        
+        h= np.dot(((g(:)).T), dir(:));
+
         if h>0:
             alfa_u = alfa_m;
         else
             alfa_l = alfa_m;
-        
+
         alfa_m = (alfa_l+alfa_u)/2;
-    end
-    
     alfa = alfa_m;
-    return alta;
+    return alfa;
