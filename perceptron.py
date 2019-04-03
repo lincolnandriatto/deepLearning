@@ -1,6 +1,7 @@
 from random import random
 from math import tan, ceil, log
 import numpy as np
+import matplotlib.pyplot as plt
 
 #X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]);
 #d = [ -1, -1, -1, 1]
@@ -40,6 +41,9 @@ def perceptron(X, d):
     #xlabel('Numero de epocas')
     #ylabel('EQM')
     #title('Evolucao do EQM')
+    plt.plot(vet_erro)
+    plt.title("Evolução do EQM")
+    plt.show()
 
 def calc_grad(X, d, W, N):
     Z = np.dot(X, W.T);
