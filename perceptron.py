@@ -2,9 +2,14 @@ from random import random
 from math import tan, ceil, log
 import numpy as np
 
-X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]);
-d = [ -1, -1, -1, 1]
+#X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]);
+#d = [ -1, -1, -1, 1]
 #W = percptrom(X, d)
+
+def init():
+    X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]);
+    d = [ -1, -1, -1, 1];
+    perceptron(X, d);
 
 def perceptron(X, d):
     N=len(X);
@@ -81,3 +86,5 @@ def calc_alfa(X, d, W, dir, N):
         alfa_m = (alfa_l+alfa_u)/2;
     alfa = alfa_m;
     return alfa;
+
+init()
