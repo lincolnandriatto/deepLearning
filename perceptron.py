@@ -8,23 +8,24 @@ import numpy as np
 
 def init():
     X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]);
-    d = [ -1, -1, -1, 1];
+    d = np.array([[ -1], [-1], [-1], [1]]);
     perceptron(X, d);
 
 def perceptron(X, d):
     N=len(X);
-    X = [[0 for x in range(N)], X];
-    ne = len(X[0]);
-    ns = len(X[0]);
-    W = [random() for i in range(ne)];
+    X = np.concatenate((np.ones((N, 1)), X), axis=1)
+    ne = np.size(X, 1);
+    ns = np.size(d, 1);
+    W = np.random.rand(ns, ne)/5;
     Y = calc_saida(X, W);
     erro = Y - d;
     EQM = 1 / N * sum(sum(erro * erro));
     nit = 0;
     nitmax = 10000;
-    vet_erro = EQM;
+    vet_erro = [];
+    vet_erro.append(EQM);
 
-    while EQM > 1e-6 & nit < nitmax:
+    while EQM > 1e-6 and nit < nitmax:
         nit = nit + 1;
         dJdW = calc_grad(X, d, W, N);
         dir = -dJdW;
@@ -33,7 +34,7 @@ def perceptron(X, d):
         Y = calc_saida(X, W);
         erro = Y - d;
         EQM = 1 / N * sum(sum(erro * erro))
-        vet_erro.push(EQM);
+        vet_erro.append(EQM);
 
     #plot(0: nit, vet_erro, 'linewidth', 2)
     #xlabel('Numero de epocas')
@@ -41,16 +42,15 @@ def perceptron(X, d):
     #title('Evolucao do EQM')
 
 def calc_grad(X, d, W, N):
-
     Z = np.dot(X, W.T);
-    Y = tan(Z);
-    erro = Y -d;
-    dJdW = np.dot((1/N), np.dot(((np.dot(erro, (np.dot((1-Y), Y)))).T, X)));
+    Y = np.tan(Z);
+    erro = Y - d;
+    dJdW = np.dot((1/N), np.dot((erro * (1-Y * Y)).T, X));
     return dJdW;
 
 def calc_saida(X, W):
-    Z= np.dot(X * W.T);
-    Y= tan(Z);
+    Z= np.dot(X, W.T);
+    Y= np.tan(Z);
     return Y;
 
 def calc_alfa(X, d, W, dir, N):
@@ -62,22 +62,22 @@ def calc_alfa(X, d, W, dir, N):
     g=calc_grad(X,d,Wnew,N);
     h=np.dot(g.flatten().T, dir.flatten());
 
-    while h<0:
+    while h < 0:
         alfa_u = 2*alfa_u;
         Wnew = W + np.dot(alfa_u, dir);
         g=calc_grad(X,d,Wnew,N);
-        h=np.dot(g.flatten().T * dir.flatten());
+        h=np.dot(g.flatten().T, dir.flatten());
 
     #**********************************************************
     alfa_m = (alfa_l+alfa_u)/2;
     k = ceil(log((alfa_u-alfa_l)/1.0e-5));
     nit = 0;
 
-    while nit<k & abs(h)>1.0e-5:
+    while nit < k and abs(h) > 1.0e-5:
         Wnew = W + alfa_m*dir;
         g = calc_grad(X, d, Wnew, N);
         h = np.dot(g.flatten().T, dir.flatten());
-
+        nit = nit + 1;
         if h>0:
             alfa_u = alfa_m;
         else:
