@@ -1,5 +1,5 @@
 from random import random
-from math import tan
+from math import tan, ceil, log
 import numpy as np
 
 X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]);
@@ -12,9 +12,9 @@ def perceptron(X, d):
     ne = len(X[0]);
     ns = len(X[0]);
     W = [random() for i in range(ne)];
-    #Y = calc_saida(X, W);
+    Y = calc_saida(X, W);
     erro = Y - d;
-    EQM = 1 / N * sum(sum(erro. * erro));
+    EQM = 1 / N * sum(sum(erro * erro));
     nit = 0;
     nitmax = 10000;
     vet_erro = EQM;
@@ -27,7 +27,7 @@ def perceptron(X, d):
         W = W + alfa * dir;
         Y = calc_saida(X, W);
         erro = Y - d;
-        EQM = 1 / N * sum(sum(erro.* erro))
+        EQM = 1 / N * sum(sum(erro * erro))
         vet_erro.push(EQM);
 
     #plot(0: nit, vet_erro, 'linewidth', 2)
@@ -37,10 +37,10 @@ def perceptron(X, d):
 
 def calc_grad(X, d, W, N):
 
-    Z=np.dot(X, W.T);
-    Y= tan(Z);
+    Z = np.dot(X, W.T);
+    Y = tan(Z);
     erro = Y -d;
-    dJdW = np.dot((1/N), np.dot(((np.dot(erro, (np.dot((1-Y),Y)))).T, X)));
+    dJdW = np.dot((1/N), np.dot(((np.dot(erro, (np.dot((1-Y), Y)))).T, X)));
     return dJdW;
 
 def calc_saida(X, W):
@@ -55,13 +55,13 @@ def calc_alfa(X, d, W, dir, N):
     #%*******************************************************
     # calcula o alfa_u positivo
     g=calc_grad(X,d,Wnew,N);
-    h=g(:)'*dir(:);
+    h=np.dot(g.flatten().T, dir.flatten());
 
     while h<0:
         alfa_u = 2*alfa_u;
-        Wnew = W + alfa_u*dir;
+        Wnew = W + np.dot(alfa_u, dir);
         g=calc_grad(X,d,Wnew,N);
-        h=g(:)'*dir(:);
+        h=np.dot(g.flatten().T * dir.flatten());
 
     #**********************************************************
     alfa_m = (alfa_l+alfa_u)/2;
@@ -70,12 +70,12 @@ def calc_alfa(X, d, W, dir, N):
 
     while nit<k & abs(h)>1.0e-5:
         Wnew = W + alfa_m*dir;
-        g=calc_grad(X,d,Wnew,N);
-        h= np.dot(((g(:)).T), dir(:));
+        g = calc_grad(X, d, Wnew, N);
+        h = np.dot(g.flatten().T, dir.flatten());
 
         if h>0:
             alfa_u = alfa_m;
-        else
+        else:
             alfa_l = alfa_m;
 
         alfa_m = (alfa_l+alfa_u)/2;
