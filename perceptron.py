@@ -41,7 +41,7 @@ def perceptron(X, d):
     #xlabel('Numero de epocas')
     #ylabel('EQM')
     #title('Evolucao do EQM')
-    plt.plot(vet_erro)
+    plt.plot([x for x in range(nitmax + 1)], vet_erro)
     plt.title("Evolução do EQM")
     plt.show()
 
