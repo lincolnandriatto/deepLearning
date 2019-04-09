@@ -1,4 +1,5 @@
 %************************************************************************
+% Universidade de São Paulo 
 % Saida deve ser codificada em -1, 1
 % X - Entrada (Nxne)
 % d - Saida desejada (Nxns)
@@ -14,9 +15,9 @@
  %data=load('iris.txt');
  %X=data(:,1:4);
  
- IRIS_SETOSA = 1
- IRIS_VERSICOLOR = 2
- IRIS_VIRGINICA = 3
+ IRIS_SETOSA = 1;
+ IRIS_VERSICOLOR = 2;
+ IRIS_VIRGINICA = 3;
 
 function W=perceptron(X,d)
 
@@ -92,44 +93,71 @@ function oneVsOne()
  
  [setosa_vs_versicolor_treino, setosa_validacao, versicolor_validacao]=obtem_treino_validacao(setosa_vs_versicolor);
  
- W=perceptron(setosa_vs_versicolor_treino(:,1:4),setosa_vs_versicolor_treino(:,5));
+ %W=perceptron(setosa_vs_versicolor_treino(:,1:4),setosa_vs_versicolor_treino(:,6));
+ resultado_setosa_validacao = predicit_one(setosa_vs_versicolor_treino(:,1:4),setosa_vs_versicolor_treino(:,6), setosa_validacao(:,1:4))
+ resultado_versicolor_validacao = predicit_one(setosa_vs_versicolor_treino(:,1:4),setosa_vs_versicolor_treino(:,6), versicolor_validacao(:,1:4))
  
  [setosa_vs_virginica_treino, setosa_validacao, virginica_validacao]=obtem_treino_validacao(setosa_vs_virginica);
  
+ resultado_setosa_validacao = predicit_one(setosa_vs_virginica_treino(:,1:4),setosa_vs_virginica_treino(:,6), setosa_validacao(:,1:4))
+ resultado_virginica_validacao = predicit_one(setosa_vs_virginica_treino(:,1:4),setosa_vs_virginica_treino(:,6), virginica_validacao(:,1:4))
+ 
  [versicolor_vs_virginica_treino, versicolor_validacao, virginica_validacao]=obtem_treino_validacao(versicolor_vs_virginica);
+ 
+ resultado_versicolor_validacao = predicit_one(versicolor_vs_virginica_treino(:,1:4),versicolor_vs_virginica_treino(:,6), versicolor_validacao(:,1:4));
+ resultado_virginica_validacao = predicit_one(versicolor_vs_virginica_treino(:,1:4),versicolor_vs_virginica_treino(:,6), virginica_validacao(:,1:4));
+ 
   
 end  
 
+function [taxa_acerto]=validacao_resultado(resultado, resultado_esperado)
+   qtd_resultado_esperado = size(resultado == resultado_esperado)
+   qtd_resultado = size(resultado)
+   taxa_acerto = 0
+   if qtd_resultado_esperado == qtd_resultado
+     taxa_acerto = 100;
+   else
+     taxa_acerto = qtd_resultado_esperado*100/qtd_resultado
+   end   
+end  
+
 function [matriz_final]=matriz_a_vs_matriz_b(ma, mb)
+
+  ma_saida = define_saida_matriz(ma, 1)
+  mb_saida = define_saida_matriz(mb, -1)
+  
+  matriz_final = [ma_saida; mb_saida];
+end
+
+function [data_set]=define_saida_matriz(X, saida)
   indice = 0;
-  numLinhas = size(ma,1);
-  matriz_a = [];
-  matriz_b = [];
+  numLinhas = size(X,1)
+  data_set = [];
   while indice < numLinhas
     indice = indice +1;
-    matriz_a = [matriz_a; ma(idice,:), 1];
-    matriz_b = [matriz_b; mb(idice,:), -1];
+    data_set = [data_set; X(indice,:), saida]
   end
-  matriz_final = [matriz_a; matriz_b];
-end
+end  
 
 function [matriz]=seleciona_dataset_por_tipo(tipo, dataSet)
   indice = 0;
-  matriz = []
+  matriz = [];
   while indice < size(dataSet, 1)
-    valor = dataSet(indice,size(dataSet, 2))
+    indice = indice + 1;
+    valor = dataSet(indice,size(dataSet, 2));
     if valor == tipo
-      matriz = [matriz; dataSet[indice,:]]
+      matriz = [matriz; dataSet(indice,:)];
+    end 
   end
 end  
 
 function [matrizTreino, matrizValidacaoPositiva, matrizValidacaoNegativa]=obtem_treino_validacao(X)
   matrizValoresPositivo = [];
-  matrizValoresNegativos = []
+  matrizValoresNegativos = [];
   numeroTreinoTotal = size(X,1);
   numeroColunasMatrizEntrada = size(X,2);
   
-  indice = 0
+  indice = 0;
   
   while indice < numeroTreinoTotal
     indice = indice + 1;
@@ -142,7 +170,7 @@ function [matrizTreino, matrizValidacaoPositiva, matrizValidacaoNegativa]=obtem_
     end 
   end 
   
-  numeroTreinoPositivo=size(matrizValoresPositivo,1)
+  numeroTreinoPositivo=size(matrizValoresPositivo,1);
   numTreino = 0;
   numTreino = numeroTreinoPositivo*0.6;
   
