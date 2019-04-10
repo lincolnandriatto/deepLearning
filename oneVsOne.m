@@ -134,6 +134,53 @@ function oneVsOne()
    
 end  
 
+function oneVsAll()
+ IRIS_SETOSA = 1;
+ IRIS_VERSICOLOR = 2;
+ IRIS_VIRGINICA = 3;  
+ 
+ X = carregaDataSet();
+ 
+ matriz_setosa = seleciona_dataset_por_tipo(IRIS_SETOSA, X);
+ matriz_versicolor = seleciona_dataset_por_tipo(IRIS_VERSICOLOR, X);
+ matriz_virginica = seleciona_dataset_por_tipo(IRIS_VIRGINICA, X);
+ 
+ setosa_vs_all = matriz_a_vs_matriz_b(matriz_setosa, [matriz_versicolor; matriz_virginica]);
+ versicolor_vs_all = matriz_a_vs_matriz_b(matriz_versicolor, [matriz_setosa; matriz_virginica]);
+ virginica_vs_all = matriz_a_vs_matriz_b(matriz_virginica, [matriz_setosa; matriz_versicolor]);
+  
+ %############################### SETOSA VS ALL ###############################(INICIO)
+ printf(" SETOSA vc ALL ");
+ [setosa_vs_all_treino, setosa_validacao, validacao_nao_setosa]=obtem_treino_validacao(setosa_vs_all);
+  
+ resultado_setosa_validacao = predicit_one(setosa_vs_all_treino(:,1:4),setosa_vs_all_treino(:,6), setosa_validacao(:,1:4));
+ taxa_acerto_setosa_validacao = validacao_resultado(resultado_setosa_validacao, 1);
+ printf("SETOSA - Foram executados %d testes de validacao com taxa de %d%% acerto", size(setosa_validacao,1), taxa_acerto_setosa_validacao);
+ 
+ %############################### SETOSA VS ALL ###############################(FIM)
+
+ %############################### VERSICOLOR VS ALL ###############################(INICIO)
+ printf(" VERSICOLOR VS ALL");
+ [versicolor_vs_all_treino, versicolor_validacao, validacao_nao_versicolor]=obtem_treino_validacao(versicolor_vs_all);
+ 
+ resultado_versicolor_validacao = predicit_one(versicolor_vs_all_treino(:,1:4),versicolor_vs_all_treino(:,6), versicolor_validacao(:,1:4));
+ taxa_acerto_versicolor_validacao = validacao_resultado(resultado_versicolor_validacao, 1);
+ printf("VERSICOLOR - Foram executados %d testes de validacao com Setosa, com taxa de %d%% acerto", size(versicolor_validacao,1), taxa_acerto_versicolor_validacao);
+ 
+ %############################### VERSICOLOR VS ALL ###############################(FIM)
+ 
+ %############################### VIRGINICA VS ALL ###############################(INICIO)
+ printf(" VIRGINICA VS ALL ");
+ [virginica_vs_all_treino, virginica_validacao, validacao_nao_virginica]=obtem_treino_validacao(virginica_vs_all);
+ 
+ resultado_virginica_validacao = predicit_one(virginica_vs_all_treino(:,1:4),virginica_vs_all_treino(:,6), virginica_validacao(:,1:4));
+ taxa_acerto_virginica_validacao = validacao_resultado(resultado_virginica_validacao, 1);
+ printf("VIRGINICA - Foram executados %d testes de validacao com taxa de %d%% acerto", size(virginica_validacao,1), taxa_acerto_virginica_validacao);
+ 
+ %############################### VERSICOLOR VS VIRGINICA ###############################(FIM)
+   
+end  
+
 function [taxa_acerto]=validacao_resultado(resultado, resultado_esperado)
    resultadoLista = resultado(:, size(resultado,2));
    
