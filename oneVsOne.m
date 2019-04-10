@@ -177,7 +177,7 @@ function oneVsAll()
  taxa_acerto_virginica_validacao = validacao_resultado(resultado_virginica_validacao, 1);
  printf("VIRGINICA - Foram executados %d testes de validacao com taxa de %d%% acerto", size(virginica_validacao,1), taxa_acerto_virginica_validacao);
  
- %############################### VERSICOLOR VS VIRGINICA ###############################(FIM)
+ %############################### VIRGINICA VS ALL ###############################(FIM)
    
 end  
 
