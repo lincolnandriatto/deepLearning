@@ -1,4 +1,5 @@
 %************************************************************************
+% Universidade de São Paulo 
 % Saida deve ser codificada em -1, 1
 % X - Entrada (Nxne)
 % d - Saida desejada (Nxns)
@@ -13,10 +14,6 @@
 
  %data=load('iris.txt');
  %X=data(:,1:4);
- 
- IRIS_SETOSA = 1;
- IRIS_VERSICOLOR = 2;
- IRIS_VIRGINICA = 3;
 
 function W=perceptron(X,d)
 
@@ -39,14 +36,14 @@ while EQM > 1e-6 & nit<nitmax
     W = W + alfa*dir;
     Y=calc_saida(X,W);
     erro = Y - d;
-    EQM = 1/N*sum(sum(erro.*erro))
+    EQM = 1/N*sum(sum(erro.*erro));
     vet_erro=[vet_erro;EQM];
 end
 %plot(0:nit,vet_erro,'linewidth',2)
-plot(0:nit,vet_erro)
-xlabel('Numero de epocas')
-ylabel('EQM')
-title ('Evolucao do EQM')
+plot(0:nit,vet_erro);
+xlabel('Numero de epocas');
+ylabel('EQM');
+title ('Evolucao do EQM');
 end
 
 function clasificar_tipos(X)
@@ -79,7 +76,10 @@ function [X]=carregaDataSet()
 end
 
 function oneVsOne()
-
+ IRIS_SETOSA = 1;
+ IRIS_VERSICOLOR = 2;
+ IRIS_VIRGINICA = 3;  
+ 
  X = carregaDataSet();
  
  matriz_setosa = seleciona_dataset_por_tipo(IRIS_SETOSA, X);
@@ -89,52 +89,88 @@ function oneVsOne()
  setosa_vs_versicolor = matriz_a_vs_matriz_b(matriz_setosa, matriz_versicolor);
  setosa_vs_virginica = matriz_a_vs_matriz_b(matriz_setosa, matriz_virginica);
  versicolor_vs_virginica = matriz_a_vs_matriz_b(matriz_versicolor, matriz_virginica);
- 
+  
+ %############################### SETOSA VS VERSICOLOR ###############################(INICIO)
+ printf(" SETOSA vc VERSICOLOR ");
  [setosa_vs_versicolor_treino, setosa_validacao, versicolor_validacao]=obtem_treino_validacao(setosa_vs_versicolor);
+  
+ resultado_setosa_validacao = predicit_one(setosa_vs_versicolor_treino(:,1:4),setosa_vs_versicolor_treino(:,6), setosa_validacao(:,1:4));
+ taxa_acerto_setosa_validacao = validacao_resultado(resultado_setosa_validacao, 1);
+ printf("SETOSA - Foram executados %d testes de validacao com taxa de %d%% acerto", size(setosa_validacao,1), taxa_acerto_setosa_validacao);
  
- %W=perceptron(setosa_vs_versicolor_treino(:,1:4),setosa_vs_versicolor_treino(:,6));
- resultado_setosa_validacao = predicit_one(setosa_vs_versicolor_treino(:,1:4),setosa_vs_versicolor_treino(:,6), setosa_validacao(:,1:4))
- resultado_versicolor_validacao = predicit_one(setosa_vs_versicolor_treino(:,1:4),setosa_vs_versicolor_treino(:,6), versicolor_validacao(:,1:4))
+ resultado_versicolor_validacao = predicit_one(setosa_vs_versicolor_treino(:,1:4),setosa_vs_versicolor_treino(:,6), versicolor_validacao(:,1:4));
+ taxa_acerto_versicolor_validacao = validacao_resultado(resultado_versicolor_validacao, -1);
+ printf("VERSICOLOR - Foram executados %d testes de validacao com taxa de %d%% acerto", size(versicolor_validacao,1), taxa_acerto_versicolor_validacao);
  
+ %############################### SETOSA VS VERSICOLOR ###############################(FIM)
+
+ %############################### SETOSA VS VIRGINICA ###############################(INICIO)
+ printf(" SETOSA VS VIRGINICA ");
  [setosa_vs_virginica_treino, setosa_validacao, virginica_validacao]=obtem_treino_validacao(setosa_vs_virginica);
  
- resultado_setosa_validacao = predicit_one(setosa_vs_virginica_treino(:,1:4),setosa_vs_virginica_treino(:,6), setosa_validacao(:,1:4))
- resultado_virginica_validacao = predicit_one(setosa_vs_virginica_treino(:,1:4),setosa_vs_virginica_treino(:,6), virginica_validacao(:,1:4))
+ resultado_setosa_validacao = predicit_one(setosa_vs_virginica_treino(:,1:4),setosa_vs_virginica_treino(:,6), setosa_validacao(:,1:4));
+ taxa_acerto_setosa_validacao = validacao_resultado(resultado_setosa_validacao, 1);
+ printf("SETOSA - Foram executados %d testes de validacao com Setosa, com taxa de %d%% acerto", size(setosa_validacao,1), taxa_acerto_setosa_validacao);
  
+ resultado_virginica_validacao = predicit_one(setosa_vs_virginica_treino(:,1:4),setosa_vs_virginica_treino(:,6), virginica_validacao(:,1:4));
+ taxa_acerto_virginica_validacao = validacao_resultado(resultado_virginica_validacao, -1);
+ printf("VIRGINICA - Foram executados %d testes de validacao com taxa de %d%% acerto", size(virginica_validacao,1), taxa_acerto_virginica_validacao);
+ 
+ %############################### SETOSA VS VIRGINICA ###############################(FIM)
+ 
+ %############################### VERSICOLOR VS VIRGINICA ###############################(INICIO)
+ printf(" VERSICOLOR VS VIRGINICA ");
  [versicolor_vs_virginica_treino, versicolor_validacao, virginica_validacao]=obtem_treino_validacao(versicolor_vs_virginica);
  
  resultado_versicolor_validacao = predicit_one(versicolor_vs_virginica_treino(:,1:4),versicolor_vs_virginica_treino(:,6), versicolor_validacao(:,1:4));
- resultado_virginica_validacao = predicit_one(versicolor_vs_virginica_treino(:,1:4),versicolor_vs_virginica_treino(:,6), virginica_validacao(:,1:4));
+ taxa_acerto_versicolor_validacao = validacao_resultado(resultado_versicolor_validacao, 1);
+ printf("VERSICOLOR - Foram executados %d testes de validacao com taxa de %d%% acerto", size(virginica_validacao,1), taxa_acerto_versicolor_validacao);
  
-  
+ resultado_virginica_validacao = predicit_one(versicolor_vs_virginica_treino(:,1:4),versicolor_vs_virginica_treino(:,6), virginica_validacao(:,1:4));
+ taxa_acerto_virginica_validacao = validacao_resultado(resultado_virginica_validacao, -1);
+ printf("VIRGINICA - Foram executados %d testes de validacao com taxa de %d%% acerto", size(virginica_validacao,1), taxa_acerto_virginica_validacao);
+ 
+ %############################### VERSICOLOR VS VIRGINICA ###############################(FIM)
+   
 end  
 
 function [taxa_acerto]=validacao_resultado(resultado, resultado_esperado)
-   qtd_resultado_esperado = size(resultado == resultado_esperado)
-   qtd_resultado = size(resultado)
-   taxa_acerto = 0
-   if qtd_resultado_esperado == qtd_resultado
+   resultadoLista = resultado(:, size(resultado,2));
+   
+   numTotalItens = size(resultadoLista, 1);
+   indice = 0;
+   qtd_total_resultado = 0;
+   while indice < numTotalItens
+     indice += 1;
+     if ceil(resultadoLista(indice)) == resultado_esperado
+        qtd_total_resultado+= 1;
+      end  
+   end  
+   
+   qtd_resultado = size(resultado, 1);
+   taxa_acerto = 0;
+   
+   if qtd_total_resultado == qtd_resultado
      taxa_acerto = 100;
    else
-     taxa_acerto = qtd_resultado_esperado*100/qtd_resultado
+     taxa_acerto = qtd_total_resultado*100/qtd_resultado;
    end   
 end  
 
 function [matriz_final]=matriz_a_vs_matriz_b(ma, mb)
-
-  ma_saida = define_saida_matriz(ma, 1)
-  mb_saida = define_saida_matriz(mb, -1)
+  ma_saida = define_saida_matriz(ma, 1);
   
+  mb_saida = define_saida_matriz(mb, -1);
   matriz_final = [ma_saida; mb_saida];
 end
 
 function [data_set]=define_saida_matriz(X, saida)
   indice = 0;
-  numLinhas = size(X,1)
+  numLinhas = size(X,1);
   data_set = [];
   while indice < numLinhas
     indice = indice +1;
-    data_set = [data_set; X(indice,:), saida]
+    data_set = [data_set; X(indice,:), saida];
   end
 end  
 
@@ -184,7 +220,7 @@ function [matrizTreino, matrizValidacaoPositiva, matrizValidacaoNegativa]=obtem_
 end
 
 function R=predicit_one(X, d, Xv)
-  W=perceptron(X,d)
+  W=perceptron(X,d);
   N=size(Xv,1);     % numero de exemplos
   Xv=[ones(N,1),Xv]; % adciona o termo de bias  
   R=calc_saida(Xv,W);
@@ -195,7 +231,6 @@ Z=X*W';
 Y= tanh(Z);
 erro = Y -d;
 dJdW = 1/N*((erro.*(1-Y.*Y))'*X);
-
 end
 
 function Y=calc_saida(X,W)
