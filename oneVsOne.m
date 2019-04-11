@@ -1,5 +1,4 @@
 %************************************************************************
-% Universidade de São Paulo 
 % Saida deve ser codificada em -1, 1
 % X - Entrada (Nxne)
 % d - Saida desejada (Nxns)
