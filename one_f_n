@@ -1,0 +1,198 @@
+%************************************************************************
+% Saida deve ser codificada em 0, 1
+% X - Entrada (Nxne)
+% d - Saida desejada (Nxns)
+% N - numero de instâncias
+% ne - numero de entradas
+% ns - numero de saidas
+% Exemplo
+        X = [0 0; 0 1; 1 0; 1 1]
+        d = [  1; -1; -1; 1]
+% ***********************************************************************
+
+ %data=load('iris.txt');
+ %X=data(:,1:4);
+ 
+ % Executar o perceptron para treino 
+ % Executar o predict para validação
+ 
+ function W=perceptron(X,d)
+
+N=size(X,1);     % numero de exemplos
+X=[ones(N,1),X]; % adciona o termo de bias
+ne=size(X,2);    % numero de entradas
+ns=size(d,2);    % numero de saidas
+W = rand(ns,ne)/5; %inicializa os pesos
+Y=calc_saida(X,W);  %calcula a saida do perceptron
+erro = Y - d; % calcula o erro
+EQM = 1/N*sum(sum(erro.*erro)); %Erro quadratico médico
+nit = 0;
+nitmax = 10000;
+vet_erro=EQM;
+while EQM > 1e-6 & nit<nitmax
+    
+    dJdW = calc_grad(X,d,W,N);
+    dir = -dJdW;
+    alfa=calc_alfa(X,d,W,dir,N);
+    W = W + alfa*dir;
+    Y=calc_saida(X,W);
+    erro = Y - d;
+    EQM = 1/N*sum(sum(erro.*erro));
+    vet_erro=[vet_erro;EQM];
+end
+%plot(0:nit,vet_erro,'linewidth',2)
+plot(0:nit,vet_erro);
+xlabel('Numero de epocas');
+ylabel('EQM');
+title ('Evolucao do EQM');
+end
+
+function one_f_n()
+	
+	X = load('dataSetIrisTiposClassifiedNormalize.txt');
+	
+	X_setosa_treino =  X(1:40,1:4);
+	X_versicolor_treino =  X(51:90,1:4);
+	X_virginica_treino =  X(101:140,1:4);
+
+	saida_setosa_treino =  X(1:40,5:7);
+	saida_versicolor_treino =  X(51:90,5:7);
+	saida_virginica_treino =  X(101:140,5:7);
+	
+	
+	X_treino = [X_setosa_treino; X_versicolor_treino; X_virginica_treino];
+	saida_desejada = [saida_setosa_treino; saida_versicolor_treino; saida_virginica_treino];
+	
+	W=perceptron(X_treino,saida_desejada);
+	
+	X_setosa_validacao =  X(41:50,1:4);
+	X_versicolor_validacao =  X(91:100,1:4);
+	X_virginica_validacao =  X(141:150,1:4);
+	
+	saida_setosa_validacao =  X(41:50,5:7);
+	saida_versicolor_validacao =  X(91:100,5:7);
+	saida_virginica_validacao =  X(141:150,5:7);
+	
+	X_validacao = [X_setosa_validacao; X_versicolor_validacao; X_virginica_validacao];
+	saida_validacao = [saida_setosa_validacao; saida_versicolor_validacao; saida_virginica_validacao];
+	
+	Y=calc_saida([ ones(size(X_validacao, 1),1), X_validacao],W);
+	
+	taxa_acerto = validacao_resultado_matriz(Y, saida_validacao);
+	fprintf('Taxa de acerto %d ', taxa_acerto);
+	
+end
+
+function [taxa_acerto]=validacao_resultado_matriz(resultado, resultado_esperado)
+   
+   numTotalItens = size(resultado, 1);
+   linha = 0;
+   qtd_total_resultado = 0;
+   while linha < numTotalItens
+     linha += 1;
+	 coluna = 0;
+	 while coluna < size(resultado, 2)
+		coluna += 1;
+		if round(resultado(linha, coluna)) == resultado_esperado(linha, coluna)
+			qtd_total_resultado+= 1;
+		 end  		
+	 end
+   end  
+   
+   qtd_total_resultado
+   
+   qtd_resultado = size(resultado, 1) * size(resultado, 2)
+   taxa_acerto = 0;
+   
+   if qtd_total_resultado == qtd_resultado
+     taxa_acerto = 100;
+   else
+     taxa_acerto = qtd_total_resultado*100/qtd_resultado;
+   end   
+end  
+
+function clasificar_tipos(X)
+  numeroColunas = size(X,2)
+  numeroTotal = size(X,1);
+  indice = 0;
+  tipoLista = []
+  
+  while indice < numeroTotal
+    indice = indice + 1;
+    tipo = [X(indice, numeroColunas)];
+    j = 0
+    valorExistente = false
+    while j<size(tipoLista, 2)
+      j = j+1
+      if tipoLista(j) == tipo
+        valorExistente = true
+      end  
+    end
+    
+    if !valorExistente
+      tipoLista = [tipoLista, tipo]
+    end
+  end
+end 
+
+function [X]=carregaDataSet()
+ data=load('dataSetIrisTiposClassified.txt');
+ X=data(:,1:5);
+end
+
+function R=predicit_one(X, d, Xv)
+  W=perceptron(X,d);
+  N=size(Xv,1);     % numero de exemplos
+  Xv=[ones(N,1),Xv]; % adciona o termo de bias  
+  R=calc_saida(Xv,W);
+end
+
+function dJdW=calc_grad(X,d,W,N)
+Z=X*W';
+Y= tanh(Z);
+%Y = sigmoid(X*W')
+erro = Y -d;
+dJdW = 1/N*((erro.*(1-Y.*Y))'*X);
+end
+
+function Y=calc_saida(X,W)
+Z=X*W';
+Y= tanh(Z);
+%Y = sigmoid(X*W')
+end
+
+function alfa=calc_alfa(X,d,W,dir,N)
+alfa_l= 0;
+alfa_u= rand;
+Wnew = W + alfa_u*dir;
+%*******************************************************
+% calcula o alfa_u positivo
+g=calc_grad(X,d,Wnew,N);
+h=g(:)'*dir(:);
+while h<0
+    alfa_u = 2*alfa_u;
+    Wnew = W + alfa_u*dir;
+    g=calc_grad(X,d,Wnew,N);
+    h=g(:)'*dir(:);
+end
+%**********************************************************
+alfa_m = (alfa_l+alfa_u)/2;
+k = ceil(log((alfa_u-alfa_l)/1.0e-5));
+nit = 0;
+
+while nit<k & abs(h)>1.0e-5
+	nit = nit +1
+    Wnew = W + alfa_m*dir;
+    g=calc_grad(X,d,Wnew,N);
+    h=g(:)'*dir(:);
+    if h>0
+        alfa_u = alfa_m;
+    else
+        alfa_l = alfa_m;
+    end
+    alfa_m = (alfa_l+alfa_u)/2;
+end
+alfa = alfa_m;
+end
+
+one_f_n();
